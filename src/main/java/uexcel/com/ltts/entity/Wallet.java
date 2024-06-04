@@ -11,7 +11,7 @@ public class Wallet {
     private String id;
     @Column(unique=true, nullable=false)
     private double balance;
-    private String status = "active";
+    private String status;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "walletNumber",referencedColumnName = "phone", nullable = false,updatable = false)

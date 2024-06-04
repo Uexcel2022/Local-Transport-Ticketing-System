@@ -23,6 +23,13 @@ public class CustomExceptHandler extends ResponseEntityExceptionHandler {
        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 
+    public ResponseEntity<String> handExceptions(Exception ex) {
+        if(ex instanceof IllegalStateException){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
 
 
 }

@@ -9,10 +9,10 @@ import uexcel.com.ltts.exception.CustomException;
 import uexcel.com.ltts.util.Repos;
 
 @Service
-public class CustomUserDetailsImp implements UserDetailsService {
+public class UserDetailsServiceImp implements UserDetailsService {
     private final Repos repos;
 
-    public CustomUserDetailsImp(Repos repos) {
+    public UserDetailsServiceImp(Repos repos) {
         this.repos = repos;
     }
 

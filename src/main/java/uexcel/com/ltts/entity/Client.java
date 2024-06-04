@@ -28,9 +28,9 @@ public class Client implements UserDetails {
     private String phone;
     @Column(nullable = false)
     private String password;
-    @Column(insertable = false)
-    private String status = "active";
-    private boolean verified = false;
+    @Column(nullable = false)
+    private String status;
+    private boolean verified;
     @Column(nullable = false)
 
     @Enumerated(EnumType.STRING)

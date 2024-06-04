@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uexcel.com.ltts.service.CustomUserDetailsImp;
+import uexcel.com.ltts.service.UserDetailsServiceImp;
 import uexcel.com.ltts.service.JwtService;
 
 import java.io.IOException;
@@ -19,12 +19,12 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final CustomUserDetailsImp customUserDetailsImp;
+    private final UserDetailsServiceImp userDetailsServiceImp;
 
-    public JwtAuthenticationFilter(JwtService jwtService, CustomUserDetailsImp customUserDetailsImp) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsServiceImp userDetailsServiceImp) {
         this.jwtService = jwtService;
 
-        this.customUserDetailsImp = customUserDetailsImp;
+        this.userDetailsServiceImp = userDetailsServiceImp;
     }
 
     @Override
@@ -35,12 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
+            return;
         }
-        assert authHeader != null;
         String token = authHeader.substring(7);
         String useName = jwtService.extractUsername(token);
         if (useName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customUserDetailsImp.loadUserByUsername(useName);
+            UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(useName);
             if(jwtService.isValid(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails,null,

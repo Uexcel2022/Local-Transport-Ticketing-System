@@ -49,7 +49,7 @@ public class Validation {
         return dateOfBirt;
     }
 
-    public String passWord(String password, String confirmPassword){
+    public String password(String password, String confirmPassword){
         if(!password.equals(confirmPassword)){
             throw new CustomException("Passwords do not match.","400");
         }
