@@ -22,7 +22,7 @@ public class WalletTransaction {
     private double amount;
     private String status;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Wallet wallet;
 
 }

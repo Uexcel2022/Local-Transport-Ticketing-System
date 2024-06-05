@@ -3,9 +3,7 @@ package uexcel.com.ltts.util;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uexcel.com.ltts.ropsitory.ClientRepository;
-import uexcel.com.ltts.ropsitory.WalletRepository;
-import uexcel.com.ltts.ropsitory.WalletTransRepository;
+import uexcel.com.ltts.ropsitory.*;
 
 @Component
 @Getter
@@ -16,4 +14,9 @@ public class Repos {
     private WalletRepository walletRepository;
     @Autowired
     private WalletTransRepository walletTransRepository;
+    @Autowired
+    private BusRepository busRepository;
+    @Autowired
+    private RouteRepository routeRepository;
+
 }
