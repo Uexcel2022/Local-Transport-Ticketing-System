@@ -7,4 +7,5 @@ import uexcel.com.ltts.entity.Route;
 @Repository
 public interface RouteRepository extends JpaRepository<Route, String> {
  Route findByOriginAndDestination(String from, String to);
+ Boolean existsRouteByOriginAndDestination(String dest, String Origin);
 }

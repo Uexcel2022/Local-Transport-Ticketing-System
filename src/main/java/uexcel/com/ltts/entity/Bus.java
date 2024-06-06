@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,8 +19,8 @@ public class Bus {
     private LocalDate endDate;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "bus_route", joinColumns = @JoinColumn(name="bus_id"),
-    inverseJoinColumns = @JoinColumn(name="route_id"))
-    private Set<Route> route;
+    @JoinTable(name = "busRoute", joinColumns = @JoinColumn(name="busId" ),
+    inverseJoinColumns = @JoinColumn(name="routeId"))
+    private List<Route> route;
 
 }

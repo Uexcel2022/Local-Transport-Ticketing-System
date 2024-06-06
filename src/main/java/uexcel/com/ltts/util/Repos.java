@@ -18,5 +18,7 @@ public class Repos {
     private BusRepository busRepository;
     @Autowired
     private RouteRepository routeRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
 
 }

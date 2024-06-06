@@ -3,6 +3,7 @@ package uexcel.com.ltts.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +16,6 @@ public class Route {
     private String destination;
     private double price;
 
-    @ManyToMany(mappedBy = "route")
-    private Set<Bus> bus;
+//    @ManyToMany(mappedBy = "route")
+//    private List<Bus> bus;
 }

@@ -6,7 +6,7 @@ spring:
     password: jvman19
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 logging:
   level:
     org:
