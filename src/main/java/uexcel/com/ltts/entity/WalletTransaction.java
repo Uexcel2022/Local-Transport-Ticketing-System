@@ -3,6 +3,7 @@ package uexcel.com.ltts.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,6 +22,8 @@ public class WalletTransaction {
     private String cCtype;
     private double amount;
     private String status;
+    @Column(nullable = false)
+    private LocalDate transactionDate;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Wallet wallet;

@@ -1,9 +1,7 @@
 package uexcel.com.ltts.service;
 
-import uexcel.com.ltts.entity.Booking;
-
-import java.util.Map;
+import uexcel.com.ltts.dto.TicketInfoDto;
 
 public interface BookingCheckinService {
-    Booking pressBooking(String routeId);
+    TicketInfoDto pressBooking(String routeId);
 }

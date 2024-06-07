@@ -23,6 +23,7 @@ public class CustomExceptHandler extends ResponseEntityExceptionHandler {
         return switch (ex.getCode()) {
             case "400" -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
             case "404" -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            case "401" -> ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(ex.getMessage());
             default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         };
 

@@ -3,6 +3,7 @@ package uexcel.com.ltts.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -12,6 +13,8 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String  ticketNumber = UUID.randomUUID().toString();
+    private String  status;
+    private LocalDate date;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Route route;
