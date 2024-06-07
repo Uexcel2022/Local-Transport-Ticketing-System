@@ -1,5 +1,6 @@
 package uexcel.com.ltts.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import uexcel.com.ltts.exception.CustomException;
 import uexcel.com.ltts.service.UserDetailsServiceImp;
 import uexcel.com.ltts.service.JwtService;
 
@@ -37,19 +39,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        String token = authHeader.substring(7);
-        String useName = jwtService.extractUsername(token);
-        if (useName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(useName);
-            if(jwtService.isValid(token, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails,null,
-                                userDetails.getAuthorities()
-                        );
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request,response);
+        try {
+            String token = authHeader.substring(7);
+            String useName = jwtService.extractUsername(token);
+            if (useName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(useName);
+
+                if (jwtService.isValid(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null,
+                                    userDetails.getAuthorities()
+                            );
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    filterChain.doFilter(request, response);
+                }
+
             }
+        }catch (Exception exception){
+            SecurityContextHolder.clearContext();
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("Invalid or expired token. Please sign in again.");
         }
     }
 }
