@@ -1,10 +1,10 @@
 package uexcel.com.ltts.service;
 
+import org.springframework.stereotype.Service;
 import uexcel.com.ltts.dto.AuthenticationResponseDto;
 import uexcel.com.ltts.dto.SignupDto;
 
 import java.util.Map;
-
 public interface AuthenticationService {
     AuthenticationResponseDto register(SignupDto signupDto);
 

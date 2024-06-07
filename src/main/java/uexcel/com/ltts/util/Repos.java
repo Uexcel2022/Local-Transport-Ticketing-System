@@ -20,5 +20,7 @@ public class Repos {
     private RouteRepository routeRepository;
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private CheckingRepository checkingRepository;
 
 }

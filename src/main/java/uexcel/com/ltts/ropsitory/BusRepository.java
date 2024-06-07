@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface BusRepository extends JpaRepository<Bus, String> {
     boolean existsBusByBusCode(String busCode);
-
     List<Bus> findByBusCode(String busCode);
+    Bus findBusByBusCode(String busCode);
 }

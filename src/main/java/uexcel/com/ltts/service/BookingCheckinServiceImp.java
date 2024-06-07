@@ -13,9 +13,9 @@ import uexcel.com.ltts.util.Repos;
 import java.time.LocalDate;
 import java.util.Map;
 
-
 @Service
 public class BookingCheckinServiceImp implements BookingCheckinService {
+    private static final Logger log = LoggerFactory.getLogger(BookingCheckinServiceImp.class);
     private final Repos repos;
 
     public BookingCheckinServiceImp(Repos repos) {
@@ -29,12 +29,14 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
                 .findById(routeId)
                 .orElseThrow(() -> new CustomException("Route not found.","404"));
 
-
-
         Client principal = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
          Client client = repos.getClientRepository()
                 .findById(principal.getId())
                 .orElseThrow(() -> new CustomException("Client not found.","404"));
+
+        if(repos.getBookingRepository().existsBookingByRouteAndStatus(route,"valid")){
+           throw new CustomException("You have a valid ticket on this route.","400");
+        }
 
         Wallet wallet = repos.getWalletRepository().findByWalletNumber(client.getPhone());
 
@@ -73,7 +75,46 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         return ticketInfoDto;
     }
 
-//    public String processCheckIn(Map<String,String> request){
-//
-//    }
+    public String processCheckIn(Map<String,String> request){
+           Booking booking = repos.getBookingRepository()
+                   .findByTicketNumberAndStatus(request.get("ticketNumber"),"valid");
+           if(booking == null) {
+               throw new CustomException("The ticked has been used, refunded or validity expired.","400");
+           }
+
+            //checking booking validity period
+           int booKedDate = booking.getDate().getDayOfYear()+1;
+           int date = LocalDate.now().getDayOfYear();
+           if(booKedDate < date) {
+               booking.setStatus("expired");
+               repos.getBookingRepository().save(booking);
+               throw  new CustomException("Ticket validity expired.","400");
+           }
+
+           //checking the route vs the bus route
+           Bus bus = repos.getBusRepository().findBusByBusCode(request.get("busCode"));
+           if(bus == null) {
+               throw new CustomException("Bus not found.","404");
+           }
+           boolean isValidRoute = false;
+           for(Route route: bus.getRoute()){
+               if(route.getId().equals(booking.getRoute().getId())) {
+                   isValidRoute = true;
+                   break;
+               }
+           }
+           if(!isValidRoute) {
+               throw new CustomException("The ticket is not for this route.","400");
+           }
+
+           booking.setStatus("used");
+           Checkin checkin = new Checkin();
+           checkin.setDate(LocalDate.now());
+           checkin.setBus(bus);
+           checkin.setBooking(booking);
+           repos.getCheckingRepository().save(checkin);
+
+           return "check in successful";
+    }
+
 }

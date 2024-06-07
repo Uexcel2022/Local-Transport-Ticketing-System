@@ -1,10 +1,11 @@
 package uexcel.com.ltts.service;
 
+import org.springframework.stereotype.Service;
 import uexcel.com.ltts.dto.BusDto;
 import uexcel.com.ltts.dto.ChangeBusRouteDto;
 import uexcel.com.ltts.entity.Route;
 
-import java.util.List;
+
 
 public interface BusRouteService {
     public String addRoute(Route request);

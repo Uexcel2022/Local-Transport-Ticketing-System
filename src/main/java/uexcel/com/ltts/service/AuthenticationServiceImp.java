@@ -13,7 +13,6 @@ import uexcel.com.ltts.util.Repos;
 import uexcel.com.ltts.util.Validation;
 
 import java.util.Map;
-
 @Service
 public class AuthenticationServiceImp implements AuthenticationService  {
     private final Repos repos;
