@@ -29,10 +29,13 @@ public class Client implements UserDetails {
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
+    private String nFullName;
+    @Column(nullable = false)
+    private String nPhone;
+    @Column(nullable = false)
     private String status;
     private boolean verified;
     @Column(nullable = false)
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

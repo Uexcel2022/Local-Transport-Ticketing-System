@@ -26,13 +26,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("client-signup")
-    public ResponseEntity<AuthenticationResponseDto> signup(@RequestBody SignupDto signupDto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(signupDto));
+    public ResponseEntity<AuthenticationResponseDto> signup(@RequestBody SignupDto request){
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(request));
     }
 
     @PostMapping("client-login")
-    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody Map<String, String> login){
-        return ResponseEntity.ok().body(authenticationService.authenticate(login));
+    public ResponseEntity<AuthenticationResponseDto> login(@RequestBody Map<String, String> request){
+        return ResponseEntity.ok().body(authenticationService.authenticate(request));
     }
 
 }

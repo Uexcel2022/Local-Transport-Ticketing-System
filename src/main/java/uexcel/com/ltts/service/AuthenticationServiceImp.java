@@ -30,20 +30,23 @@ public class AuthenticationServiceImp implements AuthenticationService  {
         this.authenticationManager = authenticationManager;
     }
 
-     public AuthenticationResponseDto register(SignupDto signupDto){
+     public AuthenticationResponseDto register(SignupDto request){
 
-        validation.ifExist(signupDto.getEmail(),signupDto.getPhone());
+        validation.ifExist(request.getEmail(),request.getPhone());
 
         Client client = new Client();
-        client.setFullName(validation.validateName(signupDto.getFullName()));
-        client.setPhone(validation.validatePhone(signupDto.getPhone()));
-        client.setEmail(validation.validateEmail(signupDto.getEmail()));
-        client.setDateOfBirth(validation.validateAge(signupDto.getDateOfBirth()));
-        client.setPassword(passwordEncoder.encode(validation.password(signupDto.getPassword(),
-                signupDto.getConfirmPassword())));
-        client.setGender(signupDto.getGender());
-        client.setRole(signupDto.getRole());
+        client.setFullName(validation.validateName(request.getFullName()));
+        client.setPhone(validation.validatePhone(request.getPhone()));
+        client.setEmail(validation.validateEmail(request.getEmail()));
+        client.setDateOfBirth(validation.validateAge(request.getDateOfBirth()));
+
+        client.setPassword(passwordEncoder.encode(validation.password(request.getPassword(),
+                request.getConfirmPassword())));
+        client.setGender(request.getGender());
+        client.setRole(request.getRole());
         client.setStatus("active");
+        client.setNFullName(validation.validateName(request.getNFullName()));
+        client.setNPhone(validation.validatePhone(request.getNPhone()));
         client.setVerified(false);
 
         Wallet wallet = new Wallet();
@@ -63,7 +66,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
 
        Client client = repos.getClientRepository().findByEmail(request.get("email"));
        if(client == null){
-           throw  new CustomException("User not found","404");
+           throw  new CustomException("Client not found.","404");
        }
 
        String token = jwtService.generateJwtToken(client);

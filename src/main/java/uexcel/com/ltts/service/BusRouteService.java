@@ -10,5 +10,4 @@ import uexcel.com.ltts.entity.Route;
 public interface BusRouteService {
     public String addRoute(Route request);
     String addBus(BusDto request);
-    public String updateBusRoute(ChangeBusRouteDto request);
 }

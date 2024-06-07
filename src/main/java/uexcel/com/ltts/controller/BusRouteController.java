@@ -30,9 +30,9 @@ public class BusRouteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(busRouteService.addBus(request));
     }
 
-    @PutMapping("update-bus-route")
-    public ResponseEntity<String> updateBusRoute(@RequestBody ChangeBusRouteDto request) {
-        return ResponseEntity.ok().body(busRouteService.updateBusRoute(request));
-    }
+//    @PutMapping("update-bus-route")
+//    public ResponseEntity<String> updateBusRoute(@RequestBody ChangeBusRouteDto request) {
+//        return ResponseEntity.ok().body(busRouteService.updateBusRoute(request));
+//    }
 
 }

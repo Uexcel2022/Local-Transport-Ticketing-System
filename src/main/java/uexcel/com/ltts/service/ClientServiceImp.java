@@ -46,8 +46,10 @@ public class ClientServiceImp implements ClientService {
         toUpdateClient.setPhone(validation.validatePhone(request.getPhone()));
         toUpdateClient.setEmail(validation.validateEmail(request.getEmail()));
         toUpdateClient.setDateOfBirth(validation.validateAge(request.getDateOfBirth()));
-        toUpdateClient.setPassword(validation.password(request.getPassword(), request.getConfirmPassword()));
         toUpdateClient.setGender(request.getGender());
+        toUpdateClient.setNFullName(validation.validateName(request.getNFullName()));
+        toUpdateClient.setNPhone(validation.validatePhone(request.getNPhone()));
+        toUpdateClient.setDateOfBirth(validation.validateAge(request.getDateOfBirth()));
         repos.getClientRepository().save(toUpdateClient);
 
 
@@ -58,4 +60,5 @@ public class ClientServiceImp implements ClientService {
     public List<Client> getAllClient() {
         return (List<Client>) repos.getClientRepository().findAll();
     }
+
 }
