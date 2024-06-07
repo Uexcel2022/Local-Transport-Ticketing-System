@@ -1,9 +1,11 @@
 package uexcel.com.ltts.controller;
 
+import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uexcel.com.ltts.dto.ClientInfoDto;
 import uexcel.com.ltts.dto.SignupDto;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.service.ClientService;
@@ -27,5 +29,9 @@ public class ClientController {
     @GetMapping("get-all-client")
     public ResponseEntity<List<Client>> updateClient() {
         return ResponseEntity.ok().body(clientService.getAllClient());
+    }
+    @GetMapping("client")
+    public ResponseEntity<ClientInfoDto> getClientInfo(@PathParam("id")String id) {
+       return ResponseEntity.ok().body(clientService.getClient(id));
     }
 }
