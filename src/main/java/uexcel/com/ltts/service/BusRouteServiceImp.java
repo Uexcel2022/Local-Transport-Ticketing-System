@@ -6,28 +6,28 @@ import uexcel.com.ltts.dto.BusDto;
 import uexcel.com.ltts.entity.Bus;
 import uexcel.com.ltts.entity.Route;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.Repos;
+import uexcel.com.ltts.util.RepositoryService;
 
 import java.util.List;
 
 
 @Service
 public class BusRouteServiceImp implements BusRouteService {
-    private final Repos repos;
+    private final RepositoryService repositoryService;
 
-    public BusRouteServiceImp(Repos repos) {
-        this.repos = repos;
+    public BusRouteServiceImp(RepositoryService repositoryService) {
+        this.repositoryService = repositoryService;
     }
 
     @Transactional
     public String addRoute(Route request) {
-            if(repos.getRouteRepository()
+            if(repositoryService.getRouteRepository()
                     .existsRouteByOriginAndDestination(request.getOrigin(), request.getDestination())){
 
                 return "Existing Routes: " + request.getOrigin() + "-" + request.getDestination();
             }
 
-        if(repos.getRouteRepository()
+        if(repositoryService.getRouteRepository()
                 .existsRouteByOriginAndDestination(request.getDestination(), request.getOrigin())){;
 
             return "Existing Routes: " + request.getDestination() + "-" + request.getOrigin();
@@ -38,8 +38,8 @@ public class BusRouteServiceImp implements BusRouteService {
         routeInversion.setDestination(request.getOrigin());
         routeInversion.setPrice(request.getPrice());
 
-        repos.getRouteRepository().save(request);
-        repos.getRouteRepository().save(routeInversion);
+        repositoryService.getRouteRepository().save(request);
+        repositoryService.getRouteRepository().save(routeInversion);
 
         return "Route added successfully.";
     }
@@ -49,7 +49,7 @@ public class BusRouteServiceImp implements BusRouteService {
 
         List<Route> routes = isExist(request.getOrigin(),request.getDestination());
 
-        if(repos.getBusRepository().existsBusByBusCode(request.getBusCode())){
+        if(repositoryService.getBusRepository().existsBusByBusCode(request.getBusCode())){
             throw new CustomException("Bus is existing.","400");
         };
 
@@ -59,7 +59,7 @@ public class BusRouteServiceImp implements BusRouteService {
         bus.setStartDate(request.getStartDate());
         bus.setRoute(routes);
 
-        repos.getBusRepository().save(bus);
+        repositoryService.getBusRepository().save(bus);
 
         return "Bus added successfully.";
     }
@@ -67,13 +67,13 @@ public class BusRouteServiceImp implements BusRouteService {
 
 
     private List<Route> isExist(String origin, String destination) {
-        Route routeTo = repos.getRouteRepository().findByOriginAndDestination(origin,destination);
+        Route routeTo = repositoryService.getRouteRepository().findByOriginAndDestination(origin,destination);
 
         if (routeTo == null) {
             throw new CustomException("Invalid route","400");
         }
 
-        Route routeFro = repos.getRouteRepository().findByOriginAndDestination(destination,origin);
+        Route routeFro = repositoryService.getRouteRepository().findByOriginAndDestination(destination,origin);
 
         if (routeFro == null) {
             throw new CustomException("Invalid route","400");

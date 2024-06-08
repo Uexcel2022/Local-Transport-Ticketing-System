@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.exception.CustomException;
 import uexcel.com.ltts.service.UserDetailsServiceImp;
 import uexcel.com.ltts.service.JwtService;
@@ -45,6 +46,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (useName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(useName);
 
+                //custom implementation
+                Client client = (Client) userDetails;
+                if(client.getStatus().equals("locked")){
+                    errorResponse(response,"Account has been locked.");
+                    return;
+                }
+
+                //custom implementation
+                if(client.getStatus().equals("deactivated")){
+                    errorResponse(response,"Account is no longer active.");
+                    return;
+                }
+
                 if (jwtService.isValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(userDetails, null,
@@ -57,11 +71,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             }
         }catch (Exception exception){
-            SecurityContextHolder.clearContext();
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("Invalid or expired token. Please sign in again.");
+            errorResponse(response,"Invalid or expired token. Please sign in again.");
         }
+
+
+    }
+
+    private static void errorResponse(HttpServletResponse response, String message) throws IOException {
+        SecurityContextHolder.clearContext();
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(message);
     }
 }

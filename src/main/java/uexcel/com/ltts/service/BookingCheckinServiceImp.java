@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uexcel.com.ltts.dto.TicketInfoDto;
 import uexcel.com.ltts.entity.*;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.Repos;
+import uexcel.com.ltts.util.RepositoryService;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -16,34 +16,34 @@ import java.util.Map;
 @Service
 public class BookingCheckinServiceImp implements BookingCheckinService {
     private static final Logger log = LoggerFactory.getLogger(BookingCheckinServiceImp.class);
-    private final Repos repos;
+    private final RepositoryService repositoryService;
 
-    public BookingCheckinServiceImp(Repos repos) {
-        this.repos = repos;
+    public BookingCheckinServiceImp(RepositoryService repositoryService) {
+        this.repositoryService = repositoryService;
     }
 
 
     @Transactional
     public TicketInfoDto pressBooking(String routeId) {
-        Route route =  repos.getRouteRepository()
+        Route route =  repositoryService.getRouteRepository()
                 .findById(routeId)
                 .orElseThrow(() -> new CustomException("Route not found.","404"));
 
         Client principal = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-         Client client = repos.getClientRepository()
+         Client client = repositoryService.getClientRepository()
                 .findById(principal.getId())
                 .orElseThrow(() -> new CustomException("Client not found.","404"));
 
-        if(repos.getBookingRepository().existsBookingByRouteAndStatus(route,"valid")){
+        if(repositoryService.getBookingRepository().existsBookingByRouteAndStatus(route,"valid")){
            throw new CustomException("You have a valid ticket on this route.","400");
         }
 
-        Wallet wallet = repos.getWalletRepository().findByWalletNumber(client.getPhone());
+        Wallet wallet = repositoryService.getWalletRepository().findByWalletNumber(client.getPhone());
 
         double rtPrice = route.getPrice();
 
         if(rtPrice > wallet.getBalance()) {
-            throw new CustomException("Insufficient balance.","401");
+            throw new CustomException("Insufficient balance.","402");
         }
 
         double walletBalance = wallet.getBalance()-rtPrice;
@@ -56,7 +56,7 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         wTransaction.setWallet(wallet);
 
         wallet.setBalance(walletBalance);
-        repos.getWalletTransRepository().save(wTransaction);
+        repositoryService.getWalletTransRepository().save(wTransaction);
 
         Booking booking = new Booking();
         booking.setClient(client);
@@ -71,12 +71,12 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         ticketInfoDto.setTicketDate(LocalDate.now());
         ticketInfoDto.setValidity("365 days");
 
-        repos.getBookingRepository().save(booking);
+        repositoryService.getBookingRepository().save(booking);
         return ticketInfoDto;
     }
 
     public String processCheckIn(Map<String,String> request){
-           Booking booking = repos.getBookingRepository()
+           Booking booking = repositoryService.getBookingRepository()
                    .findByTicketNumberAndStatus(request.get("ticketNumber"),"valid");
            if(booking == null) {
                throw new CustomException("The ticked has been used, refunded or validity expired.","400");
@@ -87,12 +87,12 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
            int date = LocalDate.now().getDayOfYear();
            if(booKedDate < date) {
                booking.setStatus("expired");
-               repos.getBookingRepository().save(booking);
+               repositoryService.getBookingRepository().save(booking);
                throw  new CustomException("Ticket validity expired.","400");
            }
 
            //checking the route vs the bus route
-           Bus bus = repos.getBusRepository().findBusByBusCode(request.get("busCode"));
+           Bus bus = repositoryService.getBusRepository().findBusByBusCode(request.get("busCode"));
            if(bus == null) {
                throw new CustomException("Bus not found.","404");
            }
@@ -112,7 +112,7 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
            checkin.setDate(LocalDate.now());
            checkin.setBus(bus);
            checkin.setBooking(booking);
-           repos.getCheckingRepository().save(checkin);
+           repositoryService.getCheckingRepository().save(checkin);
 
            return "check in successful";
     }

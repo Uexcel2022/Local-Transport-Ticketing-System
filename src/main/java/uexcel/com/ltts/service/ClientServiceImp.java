@@ -1,22 +1,17 @@
 package uexcel.com.ltts.service;
 
-import jakarta.websocket.server.PathParam;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import uexcel.com.ltts.dto.AuthenticationResponseDto;
 import uexcel.com.ltts.dto.ClientInfoDto;
 import uexcel.com.ltts.dto.SignupDto;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.entity.Wallet;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.Repos;
+import uexcel.com.ltts.util.RepositoryService;
 import uexcel.com.ltts.util.Validation;
 
-import java.security.Principal;
 import java.util.List;
 
 
@@ -24,12 +19,12 @@ import java.util.List;
 public class ClientServiceImp implements ClientService {
 
     private final Validation validation;
-    private final Repos repos;
+    private final RepositoryService repositoryService;
     AuthenticationResponseDto authenticationResponseDto;
 
-    public ClientServiceImp(Repos repos, Validation validation) {
+    public ClientServiceImp(RepositoryService repositoryService, Validation validation) {
         this.validation = validation;
-        this.repos = repos;
+        this.repositoryService = repositoryService;
     }
 
     @Override
@@ -55,7 +50,7 @@ public class ClientServiceImp implements ClientService {
         toUpdateClient.setNFullName(validation.validateName(request.getNFullName()));
         toUpdateClient.setNPhone(validation.validatePhone(request.getNPhone()));
         toUpdateClient.setDateOfBirth(validation.validateAge(request.getDateOfBirth()));
-        repos.getClientRepository().save(toUpdateClient);
+        repositoryService.getClientRepository().save(toUpdateClient);
 
 
         return "Client updated successfully";
@@ -63,14 +58,14 @@ public class ClientServiceImp implements ClientService {
 
     @Override
     public List<Client> getAllClient() {
-        return (List<Client>) repos.getClientRepository().findAll();
+        return (List<Client>) repositoryService.getClientRepository().findAll();
     }
 
     @Override
     public ClientInfoDto getClient(String id) {
-       Client client =  repos.getClientRepository().findById(id).orElseThrow(()->
+       Client client =  repositoryService.getClientRepository().findById(id).orElseThrow(()->
                new CustomException("Client not found","404"));
-       Wallet wallet = repos.getWalletRepository().findByWalletNumber(client.getPhone());
+       Wallet wallet = repositoryService.getWalletRepository().findByWalletNumber(client.getPhone());
 
        if(wallet==null){
             throw new CustomException("Wallet not found", "404");

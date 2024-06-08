@@ -6,19 +6,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.Repos;
+import uexcel.com.ltts.util.RepositoryService;
 
 @Service
 public class UserDetailsServiceImp implements UserDetailsService {
-    private final Repos repos;
+    private final RepositoryService repositoryService;
 
-    public UserDetailsServiceImp(Repos repos) {
-        this.repos = repos;
+    public UserDetailsServiceImp(RepositoryService repositoryService) {
+        this.repositoryService = repositoryService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = repos.getClientRepository().findByEmail(username);
+        Client client = repositoryService.getClientRepository().findByEmail(username);
         if (client == null) {
             throw new CustomException("Client not fund","404");
         }

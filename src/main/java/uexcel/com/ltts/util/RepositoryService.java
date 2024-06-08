@@ -7,7 +7,7 @@ import uexcel.com.ltts.ropsitory.*;
 
 @Component
 @Getter
-public class Repos {
+public class RepositoryService {
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
@@ -22,5 +22,8 @@ public class Repos {
     private BookingRepository bookingRepository;
     @Autowired
     private CheckingRepository checkingRepository;
+    @Autowired
+    VerificationTokenRepository verificationTokenRepository;
 
 }
+
