@@ -17,13 +17,14 @@ public class WalletTransaction {
     @Column(nullable = false)
     private String transactionType;
     @Column(nullable = false)
+    private String Bank;
+    @Column(nullable = false)
     private String  sourceName;
     private String cCnumber;
     private String cCtype;
     private double amount;
-    private String status;
     @Column(nullable = false)
-    private LocalDate transactionDate;
+    private LocalDate transactionDate=LocalDate.now();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Wallet wallet;

@@ -14,8 +14,9 @@ public class VerificationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @Column(unique = true, nullable = false)
     private String token = UUID.randomUUID().toString();
-    private Date date = new Date(System.currentTimeMillis() + 15*60*1000);
+    private Date date = new Date(System.currentTimeMillis() + 15*60*60*1000);
     @OneToOne(cascade = CascadeType.PERSIST)
     private Client client;
 }

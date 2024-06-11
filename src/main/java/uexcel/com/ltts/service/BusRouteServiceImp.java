@@ -6,7 +6,6 @@ import uexcel.com.ltts.dto.BusDto;
 import uexcel.com.ltts.entity.Bus;
 import uexcel.com.ltts.entity.Route;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.RepositoryService;
 
 import java.util.List;
 

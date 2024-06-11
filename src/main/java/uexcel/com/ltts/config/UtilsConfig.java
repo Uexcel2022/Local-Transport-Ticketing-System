@@ -2,7 +2,7 @@ package uexcel.com.ltts.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uexcel.com.ltts.util.RepositoryService;
+import uexcel.com.ltts.service.RepositoryService;
 import uexcel.com.ltts.util.Validation;
 
 @Configuration

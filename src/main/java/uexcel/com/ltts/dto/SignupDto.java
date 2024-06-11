@@ -18,5 +18,4 @@ public class SignupDto {
      private String confirmPassword;
      private String nFullName;
      private String nPhone;
-     private Role role;
 }

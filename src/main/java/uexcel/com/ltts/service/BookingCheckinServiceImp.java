@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uexcel.com.ltts.dto.TicketInfoDto;
 import uexcel.com.ltts.entity.*;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.RepositoryService;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -49,7 +48,8 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         double walletBalance = wallet.getBalance()-rtPrice;
         WalletTransaction wTransaction = new WalletTransaction();
         wTransaction.setTransactionType("booking");
-        wTransaction.setAmount(rtPrice);
+        wTransaction.setBank("wallet");
+        wTransaction.setAmount(-rtPrice);
         wTransaction.setSourceAccount(wallet.getClient().getPhone());
         wTransaction.setTransactionDate(LocalDate.now());
         wTransaction.setSourceName(wallet.getClient().getFullName());
@@ -69,6 +69,7 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         ticketInfoDto.setTicketNumber(booking.getTicketNumber());
         ticketInfoDto.setRoute(route.getOrigin() +" - "+ route.getDestination());
         ticketInfoDto.setTicketDate(LocalDate.now());
+        ticketInfoDto.setAmount(rtPrice);
         ticketInfoDto.setValidity("365 days");
 
         repositoryService.getBookingRepository().save(booking);

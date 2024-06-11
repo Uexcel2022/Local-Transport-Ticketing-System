@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.entity.VerificationToken;
-import uexcel.com.ltts.util.RepositoryService;
+import uexcel.com.ltts.service.RepositoryService;
 
 @Component
 public class SignupCompleteEventListener implements ApplicationListener<SignupCompleteEvent> {

@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.RepositoryService;
 
 @Service
 public class UserDetailsServiceImp implements UserDetailsService {

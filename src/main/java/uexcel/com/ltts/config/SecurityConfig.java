@@ -30,7 +30,11 @@ public class SecurityConfig {
       return   http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req->req.requestMatchers(
-                        "api/v1/client-login","api/v1/client-signup").permitAll()
+                        "api/v1/client-login","api/v1/client-signup",
+                                "api/v1/verify-email","api/v1/fresh-token-vfy-email",
+                                "api/v1/fresh-token-chg-email","api/v1/fresh-token-chg-pwd",
+                                "api/v1/chg-pwd","api/v1/chg-email").permitAll()
+                        .requestMatchers("api/v1/chg-pwd-within").hasAnyAuthority("USER")
                         .requestMatchers("api/v1/update-client").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .userDetailsService(userDetailsServiceImp)

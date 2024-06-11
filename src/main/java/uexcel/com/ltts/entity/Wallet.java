@@ -10,10 +10,8 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private double balance;
-    @Column(nullable = false)
-    private String status;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "wallet_Number",referencedColumnName = "phone", nullable = false,updatable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "wallet_Number",referencedColumnName = "phone", nullable = false,updatable = true)
     private Client client;
 }

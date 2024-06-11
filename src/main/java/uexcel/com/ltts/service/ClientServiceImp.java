@@ -9,7 +9,6 @@ import uexcel.com.ltts.dto.SignupDto;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.entity.Wallet;
 import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.util.RepositoryService;
 import uexcel.com.ltts.util.Validation;
 
 import java.util.List;
@@ -33,7 +32,6 @@ public class ClientServiceImp implements ClientService {
 
         Client toUpdateClient = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-
         if(toUpdateClient.getEmail()!=null && !toUpdateClient.getEmail().equals(request.getEmail())) {
             validation.ifExist(request.getEmail(), request.getPhone());
         }
@@ -49,7 +47,6 @@ public class ClientServiceImp implements ClientService {
         toUpdateClient.setGender(request.getGender());
         toUpdateClient.setNFullName(validation.validateName(request.getNFullName()));
         toUpdateClient.setNPhone(validation.validatePhone(request.getNPhone()));
-        toUpdateClient.setDateOfBirth(validation.validateAge(request.getDateOfBirth()));
         repositoryService.getClientRepository().save(toUpdateClient);
 
 

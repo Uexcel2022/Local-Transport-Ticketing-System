@@ -37,7 +37,7 @@ public class Client implements UserDetails {
     private boolean verified;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

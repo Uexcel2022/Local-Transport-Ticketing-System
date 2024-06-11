@@ -1,9 +1,11 @@
 package uexcel.com.ltts.util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.exception.CustomException;
+import uexcel.com.ltts.service.RepositoryService;
 
 import java.time.LocalDate;
 
@@ -15,7 +17,7 @@ public class Validation {
 
     public String validateName(String name){
 
-        isNullOrEmpty(name, "Phone is required field.");
+        isNullOrEmpty(name, "Name is required field.");
 
         if(!name.matches("[a-zA-Z]+\s[A-Za-z]+\s?[a-zA-Z]*")){
             throw new CustomException("Name is unacceptable.","400");
@@ -58,7 +60,7 @@ public class Validation {
         return dateOfBirt;
     }
 
-    public String password(String password, String confirmPassword){
+    public String validatePassword(String password, String confirmPassword){
         isNullOrEmpty(password, "Password is required field.");
         isNullOrEmpty(confirmPassword, "Confirm password is required field.");
         if(!password.equals(confirmPassword)){
@@ -124,12 +126,16 @@ public class Validation {
     }
 
     private static void isNullOrEmpty(String str, String msg){
-        if(str == null || str.isEmpty()){
+        if(str == null || str.trim().isEmpty()){
             throw new CustomException(msg,"400");
         }
     }
 
-
+    public String applicationUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":"
+                + request.getServerPort()
+                + request.getContextPath();
+    }
 
 
 }

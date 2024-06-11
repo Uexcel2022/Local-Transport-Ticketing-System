@@ -9,6 +9,7 @@ public class TicketInfoDto {
     private String name;
     private String ticketNumber;
     private String route;
+    private double amount;
     private LocalDate ticketDate;
     private String validity;
 }
