@@ -9,8 +9,9 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class BookingHistory {
-    private String bookingId;
+    private String tickNo;
     private String route;
     private LocalDate date;
+    private String status;
     private LocalDate expiryDate;
 }

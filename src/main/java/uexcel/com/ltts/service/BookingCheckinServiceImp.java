@@ -79,12 +79,15 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
 
         List<Booking> bookings =repositoryService.getBookingRepository().findByClientId(client.getId());
         for (Booking booking:bookings){
-            BookingHistory bH = new BookingHistory();
-            bH.setBookingId(booking.getId());
-            bH.setRoute(booking.getRoute().getOrigin()+"-"+booking.getRoute().getDestination());
-            bH.setDate(booking.getDate());
-            bH.setExpiryDate(booking.getDate().plusDays(365));
-            bHs.add(bH);
+            if(booking.getStatus().equals("valid")) {
+                BookingHistory bH = new BookingHistory();
+                bH.setTickNo(booking.getTicketNumber());
+                bH.setRoute(booking.getRoute().getOrigin() + "-" + booking.getRoute().getDestination());
+                bH.setDate(booking.getDate());
+                bH.setExpiryDate(booking.getDate().plusDays(365));
+                bH.setStatus(booking.getStatus());
+                bHs.add(bH);
+            }
         }
         return bHs;
     }
