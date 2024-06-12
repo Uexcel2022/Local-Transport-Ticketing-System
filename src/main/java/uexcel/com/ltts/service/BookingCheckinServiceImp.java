@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uexcel.com.ltts.dto.BookingHistory;
+import uexcel.com.ltts.dto.ValidTickets;
 import uexcel.com.ltts.dto.TicketInfoDto;
 import uexcel.com.ltts.entity.*;
 import uexcel.com.ltts.exception.CustomException;
@@ -73,14 +73,14 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         return info;
     }
 
-    public List<BookingHistory> getBookingHistory() {
+    public List<ValidTickets> getValidTickets() {
         Client client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<BookingHistory> bHs = new ArrayList<>();
+        List<ValidTickets> bHs = new ArrayList<>();
 
         List<Booking> bookings =repositoryService.getBookingRepository().findByClientId(client.getId());
         for (Booking booking:bookings){
             if(booking.getStatus().equals("valid")) {
-                BookingHistory bH = new BookingHistory();
+                ValidTickets bH = new ValidTickets();
                 bH.setTickNo(booking.getTicketNumber());
                 bH.setRoute(booking.getRoute().getOrigin() + "-" + booking.getRoute().getDestination());
                 bH.setDate(booking.getDate());

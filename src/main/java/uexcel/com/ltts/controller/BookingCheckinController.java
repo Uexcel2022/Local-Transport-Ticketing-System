@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import uexcel.com.ltts.dto.BookingHistory;
+import uexcel.com.ltts.dto.ValidTickets;
 import uexcel.com.ltts.dto.TicketInfoDto;
 import uexcel.com.ltts.service.BookingCheckinService;
 
@@ -32,7 +32,7 @@ public class BookingCheckinController {
                 .body(bookingCheckinService.processCheckIn(request));
     }
     @GetMapping("booking-history")
-    public ResponseEntity<List<BookingHistory>> getBookingHistory(){
-        return ResponseEntity.ok().body(bookingCheckinService.getBookingHistory());
+    public ResponseEntity<List<ValidTickets>> getBookingHistory(){
+        return ResponseEntity.ok().body(bookingCheckinService.getValidTickets());
     }
 }

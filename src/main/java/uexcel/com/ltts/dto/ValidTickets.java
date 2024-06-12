@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Setter
 @Getter
-public class BookingHistory {
+public class ValidTickets {
     private String tickNo;
     private String route;
     private LocalDate date;
