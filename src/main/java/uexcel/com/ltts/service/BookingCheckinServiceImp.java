@@ -5,11 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uexcel.com.ltts.dto.BookingHistory;
 import uexcel.com.ltts.dto.TicketInfoDto;
 import uexcel.com.ltts.entity.*;
 import uexcel.com.ltts.exception.CustomException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -64,16 +67,26 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         booking.setStatus("valid");
         booking.setDate(LocalDate.now());
 
-        TicketInfoDto ticketInfoDto = new TicketInfoDto();
-        ticketInfoDto.setName(client.getFullName());
-        ticketInfoDto.setTicketNumber(booking.getTicketNumber());
-        ticketInfoDto.setRoute(route.getOrigin() +" - "+ route.getDestination());
-        ticketInfoDto.setTicketDate(LocalDate.now());
-        ticketInfoDto.setAmount(rtPrice);
-        ticketInfoDto.setValidity("365 days");
+        TicketInfoDto info = getTicketInfo(client,booking,route);
 
         repositoryService.getBookingRepository().save(booking);
-        return ticketInfoDto;
+        return info;
+    }
+
+    public List<BookingHistory> getBookingHistory() {
+        Client client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<BookingHistory> bHs = new ArrayList<>();
+
+        List<Booking> bookings =repositoryService.getBookingRepository().findByClientId(client.getId());
+        for (Booking booking:bookings){
+            BookingHistory bH = new BookingHistory();
+            bH.setBookingId(booking.getId());
+            bH.setRoute(booking.getRoute().getOrigin()+"-"+booking.getRoute().getDestination());
+            bH.setDate(booking.getDate());
+            bH.setExpiryDate(booking.getDate().plusDays(365));
+            bHs.add(bH);
+        }
+        return bHs;
     }
 
     public String processCheckIn(Map<String,String> request){
@@ -83,13 +96,16 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
                throw new CustomException("The ticked has been used, refunded or validity expired.","400");
            }
 
+        if (repositoryService.getCheckingRepository().existsCheckinByBookingId(booking.getId())) {
+            throw new CustomException("The ticket has been used.","400");
+        }
+
             //checking booking validity period
-           int booKedDate = booking.getDate().getDayOfYear()+1;
-           int date = LocalDate.now().getDayOfYear();
-           if(booKedDate < date) {
+           LocalDate validityPeriod = booking.getDate().plusDays(365);
+           if(validityPeriod.isBefore(LocalDate.now())) {
                booking.setStatus("expired");
                repositoryService.getBookingRepository().save(booking);
-               throw  new CustomException("Ticket validity expired.","400");
+               throw  new CustomException("Ticket has expired.","400");
            }
 
            //checking the route vs the bus route
@@ -116,6 +132,22 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
            repositoryService.getCheckingRepository().save(checkin);
 
            return "check in successful";
+    }
+
+    private TicketInfoDto getTicketInfo(Client client,Booking booking,Route route){
+        TicketInfoDto ticketInfoDto = new TicketInfoDto();
+        ticketInfoDto.setName(client.getFullName());
+        ticketInfoDto.setTicketNumber(booking.getTicketNumber());
+        ticketInfoDto.setRoute(route.getOrigin() +" - "+ route.getDestination());
+        ticketInfoDto.setTicketDate(LocalDate.now());
+        ticketInfoDto.setAmount(route.getPrice());
+        ticketInfoDto.setValidity("365 days");
+        return ticketInfoDto;
+    }
+
+    private static LocalDate getExpiryDate(LocalDate date){
+       return  date.plusDays(365);
+
     }
 
 }

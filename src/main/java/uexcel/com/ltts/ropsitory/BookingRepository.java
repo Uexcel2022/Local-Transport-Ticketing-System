@@ -5,9 +5,13 @@ import org.springframework.stereotype.Repository;
 import uexcel.com.ltts.entity.Booking;
 import uexcel.com.ltts.entity.Route;
 
+import java.util.List;
+
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, String> {
     boolean existsBookingByRouteAndStatus(Route route, String status);
 
     Booking findByTicketNumberAndStatus(String ticketNumber,String status);
+
+    List<Booking> findByClientId(String id);
 }

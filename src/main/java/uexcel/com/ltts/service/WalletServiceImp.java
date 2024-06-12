@@ -70,7 +70,7 @@ public class WalletServiceImp implements WalletService {
                .findByWalletId(client.getPhone());
 
        for(WalletTransaction wTH: wTHs ){
-           wTHDs.add(new WalletHistoryDto(wTH.getId(),wTH.getAmount()));
+           wTHDs.add(new WalletHistoryDto(wTH.getId(),wTH.getAmount(),wTH.getTransactionDate()));
        }
         return wTHDs;
     }

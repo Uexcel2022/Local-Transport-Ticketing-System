@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import uexcel.com.ltts.dto.BookingHistory;
 import uexcel.com.ltts.dto.TicketInfoDto;
 import uexcel.com.ltts.service.BookingCheckinService;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -28,5 +30,9 @@ public class BookingCheckinController {
     public ResponseEntity<String> processBooking(@RequestBody Map<String,String> request){
         return ResponseEntity.ok()
                 .body(bookingCheckinService.processCheckIn(request));
+    }
+    @GetMapping("booking-history")
+    public ResponseEntity<List<BookingHistory>> getBookingHistory(){
+        return ResponseEntity.ok().body(bookingCheckinService.getBookingHistory());
     }
 }

@@ -5,4 +5,7 @@ import org.springframework.stereotype.Repository;
 import uexcel.com.ltts.entity.Checkin;
 @Repository
 public interface CheckingRepository extends JpaRepository<Checkin,String> {
+
+
+    Boolean existsCheckinByBookingId(String id);
 }

@@ -14,9 +14,10 @@ public class Checkin {
     private String id;
     private LocalDate date;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Bus bus;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(unique = true)
     private Booking booking;
 }
