@@ -63,7 +63,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
 
         Wallet wallet = new Wallet();
         wallet.setClient(client);
-//        repositoryService.getWalletRepository().save(wallet);
+        repositoryService.getWalletRepository().save(wallet);
         eventPublisher.publishEvent(new SignupCompleteEvent(client,url));
         String token = jwtService.generateJwtToken(client);
         return new AuthenticationResponseDto(token);

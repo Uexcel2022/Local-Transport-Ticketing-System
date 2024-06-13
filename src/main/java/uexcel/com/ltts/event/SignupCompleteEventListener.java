@@ -24,7 +24,7 @@ public class SignupCompleteEventListener implements ApplicationListener<SignupCo
         //creating token
         VerificationToken vt = new VerificationToken();
         vt.setClient(client);
-//        repositoryService.getVerificationTokenRepository().save(vt);
+        repositoryService.getVerificationTokenRepository().save(vt);
         String token = vt.getToken();
 
         //Send email
