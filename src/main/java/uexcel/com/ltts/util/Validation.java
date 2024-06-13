@@ -48,13 +48,13 @@ public class Validation {
     }
 
     public LocalDate validateAge(LocalDate dateOfBirt){
+
         isNullOrEmpty(String.valueOf(dateOfBirt),"Date of birth is required field.");
-        if(LocalDate.now().getYear() - dateOfBirt.getYear() < 17) {
+
+        LocalDate expectAgeDate = dateOfBirt.plusYears(18);
+
+        if(LocalDate.now().isBefore(expectAgeDate)){
             throw new CustomException("You are not up to 18 years of age.", "400");
-        }
-        if(LocalDate.now().getYear() - dateOfBirt.getYear() == 17 &&
-                dateOfBirt.getDayOfYear() > LocalDate.now().getDayOfYear()-1){
-            throw new CustomException("You are not up to 18 years of age.","400");
         }
 
         return dateOfBirt;
