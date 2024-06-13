@@ -9,16 +9,16 @@ import uexcel.com.ltts.entity.VerificationToken;
 import uexcel.com.ltts.service.RepositoryService;
 
 @Component
-public class SignupCompleteEventListener implements ApplicationListener<SignupCompleteEvent> {
-    private static final Logger log = LoggerFactory.getLogger(SignupCompleteEventListener.class);
+public class RegistrationCompleteEventListener implements ApplicationListener<RegistrationCompleteEvent> {
+    private static final Logger log = LoggerFactory.getLogger(RegistrationCompleteEventListener.class);
     private final RepositoryService repositoryService;
 
-    public SignupCompleteEventListener(RepositoryService repositoryService) {
+    public RegistrationCompleteEventListener(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
     }
 
     @Override
-    public void onApplicationEvent(SignupCompleteEvent event) {
+    public void onApplicationEvent(RegistrationCompleteEvent event) {
         Client client = event.getClient();
 
         //creating token

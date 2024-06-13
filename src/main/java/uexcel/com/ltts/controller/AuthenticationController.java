@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping("api/v1")
 public class AuthenticationController {
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
-    ;
+
     private final AuthenticationService authenticationService;
 
 
@@ -63,16 +63,16 @@ public class AuthenticationController {
         if("/api/v1/fresh-token-vfy-email".equals(servletRequest.getRequestURI())) {
 
             return ResponseEntity.ok().body(authenticationService
-                    .freshTokenVfyEmail(applicationUrl(servletRequest),emailPwdChgDto));
+                    .freshTokenVfyEmail(applicationUrl(servletRequest),servletRequest.getRequestURI(),emailPwdChgDto));
         }
         if("/api/v1/fresh-token-chg-pwd".equals(servletRequest.getRequestURI())) {
 
             return ResponseEntity.ok().body(authenticationService
-                    .freshTokenChgPwd(applicationUrl(servletRequest),emailPwdChgDto));
+                    .freshTokenChgPwd(applicationUrl(servletRequest),servletRequest.getRequestURI(),emailPwdChgDto));
         }
 
         return ResponseEntity.ok().body(authenticationService
-                .freshTokenChgEmail(applicationUrl(servletRequest),emailPwdChgDto));
+                .freshTokenChgEmail(applicationUrl(servletRequest),servletRequest.getRequestURI(),emailPwdChgDto));
 
     }
     @PutMapping("chg-pwd-within")

@@ -15,7 +15,8 @@ import uexcel.com.ltts.dto.SignupDto;
 import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.entity.VerificationToken;
 import uexcel.com.ltts.entity.Wallet;
-import uexcel.com.ltts.event.SignupCompleteEvent;
+import uexcel.com.ltts.event.ClientActivityEvent;
+import uexcel.com.ltts.event.RegistrationCompleteEvent;
 import uexcel.com.ltts.exception.CustomException;
 import uexcel.com.ltts.util.Validation;
 
@@ -24,7 +25,6 @@ import java.util.Map;
 
 @Service
 public class AuthenticationServiceImp implements AuthenticationService  {
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationServiceImp.class);
     private final RepositoryService repositoryService;
     private final JwtService jwtService;
     private final Validation validation;
@@ -64,7 +64,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
         Wallet wallet = new Wallet();
         wallet.setClient(client);
         repositoryService.getWalletRepository().save(wallet);
-        eventPublisher.publishEvent(new SignupCompleteEvent(client,url));
+        eventPublisher.publishEvent(new RegistrationCompleteEvent(client,url));
         String token = jwtService.generateJwtToken(client);
         return new AuthenticationResponseDto(token);
 
@@ -147,7 +147,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
             if(isEmailChange) {
                 EmailPasswordChangeDto emailPwdChgDto = new EmailPasswordChangeDto();
                 emailPwdChgDto.setEmail(vT.getClient().getEmail());
-                return freshTokenVfyEmail(servletContext, (emailPwdChgDto));
+                return freshTokenVfyEmail(servletContext, requestUri, (emailPwdChgDto));
             }
             return "Success";
         }
@@ -159,24 +159,28 @@ public class AuthenticationServiceImp implements AuthenticationService  {
 
     @Override
     @Transactional
-    public String freshTokenVfyEmail(String servletContext,EmailPasswordChangeDto request) {
-        String url = servletContext+"/verify-email?token=";
-        return getTokenAndFullUrlPath(url,request.getEmail());
+    public String freshTokenVfyEmail(String requestUrl,String uri,EmailPasswordChangeDto request) {
+//        String url = requestUrl+"/verify-email?token=";
+        eventPublisher.publishEvent( new ClientActivityEvent(
+                requestUrl,uri,request.getEmail()));
+        return "Change of email link has been sent to your email.";
 
     }
 
     @Override
     @Transactional
-    public String freshTokenChgPwd(String requestUrl,EmailPasswordChangeDto request) {
-        String url = requestUrl+"/chg-pwd?token=";
-        return getTokenAndFullUrlPath(url,request.getEmail());
+    public String freshTokenChgPwd(String requestUrl, String uri, EmailPasswordChangeDto request) {
+        eventPublisher.publishEvent( new ClientActivityEvent(
+                requestUrl,uri,request.getEmail()));
+        return "Change of email link has been sent to your email.";
     }
 
     @Override
     @Transactional
-    public String freshTokenChgEmail(String requestUrl,EmailPasswordChangeDto request) {
-        String url = requestUrl+"/chg-email?token=";
-        return getTokenAndFullUrlPath(url,request.getEmail());
+    public String freshTokenChgEmail(String requestUrl, String uri, EmailPasswordChangeDto request) {
+        eventPublisher.publishEvent( new ClientActivityEvent(
+                requestUrl,uri,request.getEmail()));
+        return "Change of email link has been sent to your email.";
     }
 
     public String changePasswordWithin(EmailPasswordChangeDto request){
@@ -207,42 +211,43 @@ public class AuthenticationServiceImp implements AuthenticationService  {
         return date.after(new Date());
     }
 
-    private VerificationToken getFreshToken(String clientId){
-        Client client = repositoryService.getClientRepository().findById(clientId)
-                .orElseThrow(() -> new CustomException("Client not found.","404"));
-        VerificationToken vt = new VerificationToken();
-        vt.setClient(client);
-        return vt;
-    }
-
-    private  String getTokenAndFullUrlPath(String urlPath, String email){
-
-        Client principal = repositoryService.getClientRepository().findByEmail(email);
-            if(principal == null){
-                throw  new CustomException("No account is associated with this email.","404");
-            }
-            if(!"active".equals(principal.getStatus())){
-                throw  new CustomException("Account is not found","404");
-            }
-
-
-        VerificationToken existingToken = repositoryService.getVerificationTokenRepository()
-                .findByClientId(principal.getId());
-
-        VerificationToken freshToken = getFreshToken(principal.getId());
-
-        if(existingToken != null){
-
-            existingToken.setToken(freshToken.getToken());
-            existingToken.setDate(new Date());
-            repositoryService.getVerificationTokenRepository().save(existingToken);
-            String url = urlPath+existingToken.getToken();
-            return "Click on the link to verify your account: " +url;
-        }
-        repositoryService.getVerificationTokenRepository().save(freshToken);
-        String url = urlPath+freshToken.getToken();
-        return "Click on the link to verify your account: " +url;
-
-    }
+//    private VerificationToken getFreshToken(String clientId){
+//        Client client = repositoryService.getClientRepository().findById(clientId)
+//                .orElseThrow(() -> new CustomException("Client not found.","404"));
+//        VerificationToken vt = new VerificationToken();
+//        vt.setClient(client);
+//        return vt;
+//    }
+//
+//    private  String getTokenAndFullUrlPath(String urlPath, String email){
+//
+//        Client principal = repositoryService.getClientRepository().findByEmail(email);
+//            if(principal == null){
+//                throw  new CustomException("No account is associated with this email.","404");
+//            }
+//            if(!"active".equals(principal.getStatus())){
+//                throw  new CustomException("Account is not found","404");
+//            }
+//
+//
+//        VerificationToken existingToken = repositoryService.getVerificationTokenRepository()
+//                .findByClientId(principal.getId());
+//
+//        VerificationToken freshToken = getFreshToken(principal.getId());
+//
+//        if(existingToken != null){
+//
+//            existingToken.setToken(freshToken.getToken());
+//            existingToken.setDate(new Date());
+//            repositoryService.getVerificationTokenRepository().save(existingToken);
+//            String url = urlPath+existingToken.getToken();
+//            return "Click on the link to verify your account: " +url;
+//        }
+//        repositoryService.getVerificationTokenRepository().save(freshToken);
+//        String url = urlPath+freshToken.getToken();
+//
+//        return "Click on the link to verify your account: " +url;
+//
+//    }
 
 }

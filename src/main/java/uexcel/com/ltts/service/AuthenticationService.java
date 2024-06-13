@@ -13,11 +13,11 @@ public interface AuthenticationService {
 
     String verifyEmail(String token);
 
-    String freshTokenVfyEmail(String requestUrl,EmailPasswordChangeDto request);
+    String freshTokenVfyEmail(String requestUrl,String uri,EmailPasswordChangeDto request);
 
-    String freshTokenChgPwd(String requestUrl,EmailPasswordChangeDto request);
+    String freshTokenChgPwd(String requestUrl,String uri,EmailPasswordChangeDto request);
 
-    String freshTokenChgEmail(String requestUrl,EmailPasswordChangeDto request);
+    String freshTokenChgEmail(String requestUrl, String uri, EmailPasswordChangeDto request);
 
    String emailPasswordReset(String token, String requestUri,
                              String contextPath, EmailPasswordChangeDto request);
