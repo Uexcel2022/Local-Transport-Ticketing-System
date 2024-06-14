@@ -9,5 +9,6 @@ import java.util.List;
 public interface WalletService {
     String fundWallet(FundWalletDto fundWalletDto);
     String walletTransfer(FundTransferDto request);
-    public List<WalletHistoryDto> transHistory();
+    List<WalletHistoryDto> transHistory();
+    String cancelBooking(String ticketNo);
 }

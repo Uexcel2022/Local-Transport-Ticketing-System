@@ -9,6 +9,7 @@ import uexcel.com.ltts.dto.WalletHistoryDto;
 import uexcel.com.ltts.service.WalletService;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("api/v1")
@@ -33,5 +34,14 @@ public class WalletController {
     @GetMapping("trans-history")
     public ResponseEntity<List<WalletHistoryDto>> getTransHistory(){
        return ResponseEntity.ok().body(walletService.transHistory());
+    }
+     @PostMapping("cancel-ticket")
+    public ResponseEntity<String> cancelBooking(@RequestBody Map<String,String> ticketNo){
+         String resp = walletService.cancelBooking(ticketNo.get("ticketNumber"));
+         String[] rsp = resp.split(":");
+         if(rsp.length == 2){
+             return ResponseEntity.status(400).body(rsp[0]);
+         }
+        return ResponseEntity.ok().body(resp);
     }
 }

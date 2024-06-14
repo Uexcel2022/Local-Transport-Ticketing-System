@@ -1,7 +1,5 @@
 package uexcel.com.ltts.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -160,10 +158,9 @@ public class AuthenticationServiceImp implements AuthenticationService  {
     @Override
     @Transactional
     public String freshTokenVfyEmail(String requestUrl,String uri,EmailPasswordChangeDto request) {
-//        String url = requestUrl+"/verify-email?token=";
         eventPublisher.publishEvent( new ClientActivityEvent(
                 requestUrl,uri,request.getEmail()));
-        return "Change of email link has been sent to your email.";
+        return "Verification of email link has been sent to your email.";
 
     }
 
@@ -172,7 +169,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
     public String freshTokenChgPwd(String requestUrl, String uri, EmailPasswordChangeDto request) {
         eventPublisher.publishEvent( new ClientActivityEvent(
                 requestUrl,uri,request.getEmail()));
-        return "Change of email link has been sent to your email.";
+        return "Change of password link has been sent to your email.";
     }
 
     @Override
@@ -201,7 +198,6 @@ public class AuthenticationServiceImp implements AuthenticationService  {
                 validation.validatePassword(request.getNewPassword(),
                         request.getConfirmPassword())));
                 repositoryService.getClientRepository().save(client);
-
 
         return "Success";
     }

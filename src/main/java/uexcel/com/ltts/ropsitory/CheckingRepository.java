@@ -8,4 +8,6 @@ public interface CheckingRepository extends JpaRepository<Checkin,String> {
 
 
     Boolean existsCheckinByBookingId(String id);
+
+    Checkin findByBookingId(String id);
 }
