@@ -74,7 +74,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
       authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.get("email"), request.get("password")));
 
-       Client client = repositoryService.getClientRepository().existClientByEmail(request.get("email"));
+       Client client = repositoryService.getClientRepository().findByEmail(request.get("email"));
        if(client == null){
            throw  new CustomException("Client not found.","404");
        }
@@ -186,7 +186,7 @@ public class AuthenticationServiceImp implements AuthenticationService  {
             throw  new CustomException("Client not found.","404");
         }
         Client principal = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Client client = repositoryService.getClientRepository().existClientByEmail(principal.getEmail());
+        Client client = repositoryService.getClientRepository().findByEmail(principal.getEmail());
         if(client==null){
             throw new CustomException("Something went wrong","404");
         }

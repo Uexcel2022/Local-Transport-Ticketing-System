@@ -38,7 +38,7 @@ public class ClientActivityEventListener implements ApplicationListener<ClientAc
         }
 
 
-        Client client = repositoryService.getClientRepository().existClientByEmail(event.getEmail());
+        Client client = repositoryService.getClientRepository().findByEmail(event.getEmail());
         if(client == null){
             throw  new CustomException("No account is associated with this email.","404");
         }

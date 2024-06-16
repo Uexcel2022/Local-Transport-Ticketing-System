@@ -17,7 +17,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Client client = repositoryService.getClientRepository().existClientByEmail(username);
+        Client client = repositoryService.getClientRepository().findByEmail(username);
         if (client == null) {
             throw new CustomException("Client not fund","404");
         }

@@ -11,4 +11,6 @@ public interface ClientRepository extends CrudRepository<Client, String> {
     Client findByPhone(String phone);
 
     boolean existsClientByPhone(String phone);
+
+    Client findByEmail(String email);
 }
