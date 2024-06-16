@@ -114,13 +114,12 @@ public class Validation {
     public void ifExist(String email, String phone){
         isNullOrEmpty(email, "Email is required field.");
         isNullOrEmpty(phone, "Phone is required field.");
-        Client clientEmail = repositoryService.getClientRepository().findByEmail(email);
-        if(clientEmail != null){
+
+        if(repositoryService.getClientRepository().existsClientByEmail(email)){
             throw new CustomException("Email already exist.","400");
         }
 
-        Client clientPhone = repositoryService.getClientRepository().findByPhone(phone);
-        if(clientPhone != null){
+        if(repositoryService.getClientRepository().existsClientByPhone(phone)){
             throw new CustomException("Phone already exist.","400");
         }
     }

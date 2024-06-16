@@ -89,7 +89,7 @@ public class WalletServiceImp implements WalletService {
 
         Client client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Booking booking = repositoryService.getBookingRepository().findByTicketNumberAndStatus(ticketNo,"valid");
-        if(booking == null || "valid".equals(booking.getStatus())){
+        if(booking == null){
             throw new CustomException("The ticked is no longer valid.","400");
         }
 
