@@ -78,7 +78,8 @@ public class WalletServiceImp implements WalletService {
                .findByWalletIdAndTransactionDateIsAfter(wallet.getId(),dateFrom);
 
        for(WalletTransaction wTH: wTHs ){
-           wTHDs.add(new WalletHistoryDto(wTH.getId(),wTH.getAmount(),wTH.getTransactionDate()));
+           wTHDs.add(new WalletHistoryDto(wTH.getId(),wTH.getAmount(),
+                   wTH.getTransactionDate(),wTH.getTransactionType()));
        }
         return wTHDs;
     }

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class TicketInfoDto {
+    private String ticketId;
     private String name;
     private String ticketNumber;
     private String route;

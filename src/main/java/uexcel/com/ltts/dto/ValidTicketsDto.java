@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class ValidTicketsDto {
+    private String bookingId;
     private String tickNo;
     private String route;
     private LocalDate date;

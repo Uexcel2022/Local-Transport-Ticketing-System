@@ -81,6 +81,7 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         for (Booking booking:bookings){
             if(booking.getStatus().equals("valid")) {
                 ValidTicketsDto bH = new ValidTicketsDto();
+                bH.setBookingId(booking.getId());
                 bH.setTickNo(booking.getTicketNumber());
                 bH.setRoute(booking.getRoute().getOrigin() + "-" + booking.getRoute().getDestination());
                 bH.setDate(booking.getDate());
@@ -139,6 +140,7 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
 
     private TicketInfoDto getTicketInfo(Client client,Booking booking,Route route){
         TicketInfoDto ticketInfoDto = new TicketInfoDto();
+        ticketInfoDto.setTicketId(booking.getId());
         ticketInfoDto.setName(client.getFullName());
         ticketInfoDto.setTicketNumber(booking.getTicketNumber());
         ticketInfoDto.setRoute(route.getOrigin() +" - "+ route.getDestination());

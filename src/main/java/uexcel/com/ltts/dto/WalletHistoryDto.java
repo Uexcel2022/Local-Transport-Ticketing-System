@@ -9,13 +9,15 @@ import java.time.LocalDate;
 @Getter
 public class WalletHistoryDto {
     private String transId;
+    private String transType;
     private double amount;
     private LocalDate date;
 
-    public WalletHistoryDto(String transId, double amount, LocalDate date) {
+    public WalletHistoryDto(String transId, double amount, LocalDate date,String transType) {
         this.transId = transId;
         this.amount = amount;
         this.date = date;
+        this.transType = transType;
 
     }
 }
