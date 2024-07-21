@@ -1,6 +1,5 @@
 package uexcel.com.ltts.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uexcel.com.ltts.entity.Client;
-import uexcel.com.ltts.exception.CustomException;
-import uexcel.com.ltts.service.UserDetailsServiceImp;
+import uexcel.com.ltts.service.UserDetailsServiceImpl;
 import uexcel.com.ltts.service.JwtService;
 
 import java.io.IOException;
@@ -22,12 +20,12 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserDetailsServiceImp userDetailsServiceImp;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsServiceImp userDetailsServiceImp) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsServiceImpl userDetailsServiceImpl) {
         this.jwtService = jwtService;
 
-        this.userDetailsServiceImp = userDetailsServiceImp;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             String useName = jwtService.extractUsername(token);
             if (useName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsServiceImp.loadUserByUsername(useName);
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(useName);
 
                 //custom implementation
                 Client client = (Client) userDetails;

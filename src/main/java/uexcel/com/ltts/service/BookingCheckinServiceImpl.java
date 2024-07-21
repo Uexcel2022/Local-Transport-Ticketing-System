@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class BookingCheckinServiceImp implements BookingCheckinService {
-    private static final Logger log = LoggerFactory.getLogger(BookingCheckinServiceImp.class);
+public class BookingCheckinServiceImpl implements BookingCheckinService {
+    private static final Logger log = LoggerFactory.getLogger(BookingCheckinServiceImpl.class);
     private final RepositoryService repositoryService;
 
-    public BookingCheckinServiceImp(RepositoryService repositoryService) {
+    public BookingCheckinServiceImpl(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
     }
 
@@ -66,11 +66,8 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         booking.setRoute(route);
         booking.setStatus("valid");
         booking.setDate(LocalDate.now());
-
-        TicketInfoDto info = getTicketInfo(client,booking,route);
-
         repositoryService.getBookingRepository().save(booking);
-        return info;
+        return getTicketInfo(client,booking,route);
     }
 
     public List<ValidTicketsDto> getValidTickets() {
@@ -144,7 +141,7 @@ public class BookingCheckinServiceImp implements BookingCheckinService {
         ticketInfoDto.setName(client.getFullName());
         ticketInfoDto.setTicketNumber(booking.getTicketNumber());
         ticketInfoDto.setRoute(route.getOrigin() +" - "+ route.getDestination());
-        ticketInfoDto.setTicketDate(LocalDate.now());
+        ticketInfoDto.setTicketDate(booking.getDate());
         ticketInfoDto.setAmount(route.getPrice());
         ticketInfoDto.setValidity("365 days");
         return ticketInfoDto;

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class WalletServiceImp implements WalletService {
-    private static final Logger log = LoggerFactory.getLogger(WalletServiceImp.class);
+public class WalletServiceImpl implements WalletService {
+    private static final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final RepositoryService repositoryService;
 
-    public WalletServiceImp(RepositoryService repositoryService) {
+    public WalletServiceImpl(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
     }
 

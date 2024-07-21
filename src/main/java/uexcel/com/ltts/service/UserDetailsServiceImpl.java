@@ -8,10 +8,10 @@ import uexcel.com.ltts.entity.Client;
 import uexcel.com.ltts.exception.CustomException;
 
 @Service
-public class UserDetailsServiceImp implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
     private final RepositoryService repositoryService;
 
-    public UserDetailsServiceImp(RepositoryService repositoryService) {
+    public UserDetailsServiceImpl(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
     }
 

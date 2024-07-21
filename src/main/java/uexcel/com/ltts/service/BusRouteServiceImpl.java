@@ -11,10 +11,10 @@ import java.util.List;
 
 
 @Service
-public class BusRouteServiceImp implements BusRouteService {
+public class BusRouteServiceImpl implements BusRouteService {
     private final RepositoryService repositoryService;
 
-    public BusRouteServiceImp(RepositoryService repositoryService) {
+    public BusRouteServiceImpl(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
     }
 
@@ -63,6 +63,16 @@ public class BusRouteServiceImp implements BusRouteService {
         return "Bus added successfully.";
     }
 
+    @Override
+    public Route findRouteByOriginDestination(String origin, String destination) {
+        return  repositoryService.getRouteRepository()
+                .findByOriginAndDestination(origin, destination);
+    }
+
+    @Override
+    public List<Route> findAllRoutes() {
+        return repositoryService.getRouteRepository().findAll();
+    }
 
 
     private List<Route> isExist(String origin, String destination) {

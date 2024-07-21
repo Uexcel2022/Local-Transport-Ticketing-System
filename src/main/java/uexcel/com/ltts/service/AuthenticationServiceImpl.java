@@ -1,5 +1,6 @@
 package uexcel.com.ltts.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Service
-public class AuthenticationServiceImp implements AuthenticationService  {
+public class AuthenticationServiceImpl implements AuthenticationService  {
     private final RepositoryService repositoryService;
     private final JwtService jwtService;
     private final Validation validation;
@@ -30,8 +31,9 @@ public class AuthenticationServiceImp implements AuthenticationService  {
     private final AuthenticationManager authenticationManager;
     private final ApplicationEventPublisher eventPublisher;
 
-    public AuthenticationServiceImp(RepositoryService repositoryService, JwtService jwtService, Validation validation,
-                                    PasswordEncoder passwordEncoder, AuthenticationManager
+    @Autowired
+    public AuthenticationServiceImpl(RepositoryService repositoryService, JwtService jwtService, Validation validation,
+                                     PasswordEncoder passwordEncoder, AuthenticationManager
                                             authenticationManager, ApplicationEventPublisher eventPublisher) {
         this.repositoryService = repositoryService;
         this.jwtService = jwtService;

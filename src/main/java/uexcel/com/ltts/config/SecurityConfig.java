@@ -13,16 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uexcel.com.ltts.filter.JwtAuthenticationFilter;
-import uexcel.com.ltts.service.UserDetailsServiceImp;
+import uexcel.com.ltts.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final UserDetailsServiceImp userDetailsServiceImp;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(UserDetailsServiceImp userDetailsServiceImp, JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.userDetailsServiceImp = userDetailsServiceImp;
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
     @Bean
@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("api/v1/chg-pwd-within").hasAnyAuthority("USER")
                         .requestMatchers("api/v1/update-client").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated())
-                .userDetailsService(userDetailsServiceImp)
+                .userDetailsService(userDetailsServiceImpl)
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

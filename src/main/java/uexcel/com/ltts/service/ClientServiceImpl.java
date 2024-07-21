@@ -15,13 +15,13 @@ import java.util.List;
 
 
 @Service
-public class ClientServiceImp implements ClientService {
+public class ClientServiceImpl implements ClientService {
 
     private final Validation validation;
     private final RepositoryService repositoryService;
     AuthenticationResponseDto authenticationResponseDto;
 
-    public ClientServiceImp(RepositoryService repositoryService, Validation validation) {
+    public ClientServiceImpl(RepositoryService repositoryService, Validation validation) {
         this.validation = validation;
         this.repositoryService = repositoryService;
     }
