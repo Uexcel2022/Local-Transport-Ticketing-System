@@ -67,17 +67,31 @@ public class ClientServiceImpl implements ClientService {
        if(wallet==null){
             throw new CustomException("Wallet not found", "404");
         }
-       ClientInfoDto clientInfoDto = new ClientInfoDto();
-        clientInfoDto.setId(client.getId());
-       clientInfoDto.setFullName(client.getFullName());
-       clientInfoDto.setPhone(client.getPhone());
-       clientInfoDto.setEmail(client.getEmail());
-       clientInfoDto.setDateOfBirth(client.getDateOfBirth());
-       clientInfoDto.setBalance(wallet.getBalance());
-       clientInfoDto.setNFullName(client.getNFullName());
-       clientInfoDto.setNPhone(client.getNPhone());
-       return clientInfoDto;
 
+        return getClientInfoDto(client, wallet);
+
+    }
+
+    @Override
+    public ClientInfoDto findLogonClient() {
+        Client client = (Client) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return getClient(client.getId());
+    }
+
+
+
+    private static ClientInfoDto getClientInfoDto(Client client, Wallet wallet) {
+        ClientInfoDto clientInfoDto = new ClientInfoDto();
+        clientInfoDto.setId(client.getId());
+        clientInfoDto.setFullName(client.getFullName());
+        clientInfoDto.setPhone(client.getPhone());
+        clientInfoDto.setEmail(client.getEmail());
+        clientInfoDto.setDateOfBirth(client.getDateOfBirth());
+        clientInfoDto.setBalance(wallet.getBalance());
+        clientInfoDto.setNFullName(client.getNFullName());
+        clientInfoDto.setNPhone(client.getNPhone());
+        clientInfoDto.setWalletNumber(client.getNPhone());
+        return clientInfoDto;
     }
 
 

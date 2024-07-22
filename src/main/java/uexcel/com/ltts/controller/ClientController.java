@@ -34,4 +34,11 @@ public class ClientController {
     public ResponseEntity<ClientInfoDto> getClientInfo(@PathParam("id")String id) {
        return ResponseEntity.ok().body(clientService.getClient(id));
     }
+
+    @GetMapping("logon-client")
+    public ResponseEntity<ClientInfoDto> getClientInfo() {
+        return ResponseEntity.ok().body(clientService.findLogonClient());
+    }
+
+
 }

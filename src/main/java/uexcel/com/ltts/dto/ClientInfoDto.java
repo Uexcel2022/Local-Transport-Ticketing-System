@@ -13,4 +13,5 @@ public class ClientInfoDto {
     private double balance;
     private String nFullName;
     private String nPhone;
+    private String walletNumber;
 }
